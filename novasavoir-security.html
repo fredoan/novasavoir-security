@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>NOVASAVOIR-SECURITY — Sécurité & authentification pour web, app et sites</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root{
+    --navy:#0B1F3A;
+    --navy-deep:#071527;
+    --navy-mid:#123A63;
+    --teal:#12B8A6;
+    --teal-dim:#0E8F82;
+    --teal-glow:rgba(18,184,166,0.35);
+    --paper:#F6F8FB;
+    --paper-line:#DCE3EC;
+    --ink:#0B1F3A;
+    --ink-soft:#5A6B85;
+    --gold:#C9A227;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.55;
+  }
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img,svg{display:block;}
+
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(7,21,39,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:74px;
+  }
+  .logo{display:flex; align-items:center; gap:10px;}
+  .logo svg{width:34px;height:34px;}
+  .logo-text{
+    font-family:'Sora', sans-serif; font-weight:800; font-size:16.5px;
+    color:#fff; letter-spacing:0.3px; line-height:1.05;
+  }
+  .logo-text span{display:block; font-size:9.5px; font-weight:600; letter-spacing:2px; color:#8FE9DC; margin-top:2px;}
+  .nav-links{display:flex; gap:30px; font-size:14px; font-weight:600; color:#C7D3E6;}
+  .nav-links a:hover{color:#8FE9DC;}
+  .nav-cta{
+    background:var(--teal); color:var(--navy-deep); font-weight:700; font-size:13.5px;
+    padding:10px 18px; border-radius:999px;
+  }
+  .nav-cta:hover{background:#8FE9DC;}
+  .burger{display:none;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    position:relative;
+    background:
+      radial-gradient(900px 460px at 85% -10%, #164a7d 0%, transparent 60%),
+      radial-gradient(700px 400px at 5% 10%, #0f3355 0%, transparent 55%),
+      linear-gradient(180deg, var(--navy-deep) 0%, #0A1E38 100%);
+    color:#fff;
+    overflow:hidden;
+    padding:88px 0 96px;
+  }
+  header.hero .grid-bg{
+    position:absolute; inset:0; opacity:0.14;
+    background-image:
+      linear-gradient(rgba(18,184,166,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(18,184,166,0.5) 1px, transparent 1px);
+    background-size:46px 46px;
+    mask-image:radial-gradient(ellipse 60% 60% at 70% 30%, black, transparent);
+  }
+  .hero-inner{position:relative; display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:center;}
+  .eyebrow-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(18,184,166,0.14); border:1px solid rgba(18,184,166,0.4);
+    color:#8FE9DC; font-size:11.5px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+    padding:7px 14px; border-radius:999px; margin-bottom:22px;
+  }
+  h1{
+    font-family:'Sora', sans-serif; font-weight:800; font-size:44px; line-height:1.1;
+    letter-spacing:-0.5px; margin-bottom:20px;
+  }
+  h1 em{font-style:normal; color:var(--teal);}
+  .hero-sub{font-size:16px; color:#B9C8DE; max-width:480px; margin-bottom:32px;}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--teal); color:var(--navy-deep); font-weight:700; font-size:14.5px;
+    padding:14px 26px; border-radius:10px;
+  }
+  .btn-primary:hover{background:#8FE9DC;}
+  .btn-ghost{
+    border:1px solid rgba(255,255,255,0.25); color:#fff; font-weight:600; font-size:14.5px;
+    padding:14px 26px; border-radius:10px;
+  }
+  .btn-ghost:hover{border-color:var(--teal); color:var(--teal);}
+
+  .hero-badge-stats{display:flex; gap:28px; margin-top:44px; flex-wrap:wrap;}
+  .stat b{font-family:'Sora', sans-serif; font-size:22px; display:block; color:#fff;}
+  .stat span{font-size:11.5px; color:#8CA0BF; letter-spacing:0.4px;}
+
+  /* radar shield graphic */
+  .radar-holder{position:relative; display:flex; align-items:center; justify-content:center;}
+  .radar-ring{
+    position:absolute; border-radius:50%; border:1px solid rgba(18,184,166,0.25);
+  }
+  .r1{width:420px;height:420px;}
+  .r2{width:320px;height:320px;}
+  .r3{width:220px;height:220px;}
+  .sweep{
+    position:absolute; width:420px;height:420px; border-radius:50%;
+    background:conic-gradient(from 0deg, rgba(18,184,166,0.35), transparent 40%);
+    animation:spin 5s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .shield-core{position:relative; width:150px;height:150px;}
+
+  @media (prefers-reduced-motion:reduce){ .sweep{animation:none;} }
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:88px 0;}
+  .section-head{max-width:640px; margin:0 auto 48px; text-align:center;}
+  .eyebrow{
+    font-size:11.5px; letter-spacing:2px; text-transform:uppercase; color:var(--teal-dim);
+    font-weight:700; margin-bottom:10px;
+  }
+  h2{font-family:'Sora', sans-serif; font-weight:800; font-size:30px; color:var(--navy); letter-spacing:-0.3px;}
+  .section-sub{color:var(--ink-soft); font-size:15px; margin-top:12px;}
+
+  /* services */
+  .services-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  .service-card{
+    background:#fff; border:1px solid var(--paper-line); border-radius:16px; padding:28px 24px;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .service-card:hover{transform:translateY(-4px); box-shadow:0 18px 40px -18px rgba(11,31,58,0.25);}
+  .service-icon{
+    width:44px;height:44px; border-radius:12px; background:rgba(18,184,166,0.12);
+    display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+  }
+  .service-icon svg{width:22px;height:22px;}
+  .service-card h3{font-family:'Sora', sans-serif; font-size:16.5px; font-weight:700; color:var(--navy); margin-bottom:8px;}
+  .service-card p{font-size:13.5px; color:var(--ink-soft);}
+
+  /* admin band */
+  .admin-band{
+    background:linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color:#fff; border-radius:22px; padding:52px 44px;
+    display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;
+  }
+  .admin-band .eyebrow{color:#8FE9DC;}
+  .admin-band h2{color:#fff;}
+  .admin-band p{color:#C7D3E6; font-size:14.5px; margin-top:14px;}
+  .admin-list{margin-top:22px; display:flex; flex-direction:column; gap:12px;}
+  .admin-list li{display:flex; gap:10px; font-size:13.5px; color:#DCE7F5;}
+  .admin-list svg{flex:none; width:16px;height:16px; margin-top:2px;}
+  .admin-panel-mock{
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12);
+    border-radius:14px; padding:18px; font-family:'JetBrains Mono', monospace; font-size:11.5px; color:#9FD8CF;
+  }
+  .admin-panel-mock .bar{display:flex; gap:6px; margin-bottom:14px;}
+  .admin-panel-mock .dot{width:8px;height:8px;border-radius:50%;background:#345070;}
+  .admin-row{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed rgba(255,255,255,0.1); color:#B9C8DE;}
+  .admin-row b{color:#8FE9DC;}
+  .status-ok{color:#7FE7B4; font-weight:700;}
+
+  /* pricing */
+  .pricing-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:stretch;}
+  .price-card{
+    background:#fff; border:1px solid var(--paper-line); border-radius:18px; padding:32px 26px;
+    display:flex; flex-direction:column;
+  }
+  .price-card.featured{
+    border-color:var(--teal); box-shadow:0 22px 50px -22px rgba(18,184,166,0.45); position:relative;
+    transform:scale(1.03);
+  }
+  .featured-tag{
+    position:absolute; top:-13px; left:26px;
+    background:var(--teal); color:var(--navy-deep); font-size:11px; font-weight:800;
+    letter-spacing:0.6px; text-transform:uppercase; padding:5px 12px; border-radius:999px;
+  }
+  .price-name{font-family:'Sora', sans-serif; font-weight:700; font-size:17px; color:var(--navy);}
+  .price-desc{font-size:12.5px; color:var(--ink-soft); margin:6px 0 20px;}
+  .price-amount{font-family:'Sora', sans-serif; font-weight:800; font-size:34px; color:var(--navy);}
+  .price-amount span{font-size:14px; font-weight:600; color:var(--ink-soft);}
+  .price-cfa{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--teal-dim); font-weight:700; margin:6px 0 22px;
+  }
+  .price-features{flex:1; display:flex; flex-direction:column; gap:11px; margin-bottom:24px;}
+  .price-features li{display:flex; gap:9px; font-size:13px; color:var(--ink);}
+  .price-features svg{flex:none; width:15px;height:15px; margin-top:2px; color:var(--teal-dim);}
+  .price-btn{
+    text-align:center; padding:12px; border-radius:10px; font-weight:700; font-size:13.5px;
+    background:var(--paper); border:1px solid var(--paper-line); color:var(--navy);
+  }
+  .price-card.featured .price-btn{background:var(--navy); color:#fff; border-color:var(--navy);}
+  .price-card.featured .price-btn:hover{background:var(--teal-dim);}
+  .price-note{text-align:center; font-size:12px; color:var(--ink-soft); margin-top:28px;}
+
+  /* rate strip */
+  .rate-strip{
+    max-width:1120px; margin:0 auto; text-align:center; font-size:12px; color:var(--ink-soft);
+    font-family:'JetBrains Mono', monospace; padding-top:8px;
+  }
+
+  /* how it works */
+  .steps{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  .step{background:#fff; border:1px solid var(--paper-line); border-radius:14px; padding:22px 18px;}
+  .step-num{
+    font-family:'Sora', sans-serif; font-weight:800; font-size:12px; color:var(--teal-dim);
+    letter-spacing:1px; margin-bottom:10px;
+  }
+  .step h4{font-family:'Sora', sans-serif; font-size:14.5px; color:var(--navy); margin-bottom:6px;}
+  .step p{font-size:12.5px; color:var(--ink-soft);}
+
+  /* CTA */
+  .cta{
+    background:linear-gradient(135deg, var(--navy-deep), var(--navy));
+    color:#fff; text-align:center; border-radius:22px; padding:60px 30px;
+  }
+  .cta h2{color:#fff;}
+  .cta p{color:#B9C8DE; margin:14px 0 28px; font-size:14.5px;}
+
+  footer{background:var(--navy-deep); color:#8CA0BF; padding:44px 0 28px; font-size:12.5px;}
+  footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .foot-brand{display:flex; align-items:center; gap:10px; color:#fff; font-family:'Sora',sans-serif; font-weight:700; font-size:14px;}
+  .foot-brand svg{width:24px;height:24px;}
+
+  @media (max-width: 880px){
+    .hero-inner{grid-template-columns:1fr;}
+    .radar-holder{order:-1; transform:scale(0.7);}
+    .services-grid, .pricing-grid, .steps{grid-template-columns:1fr;}
+    .admin-band{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+    h1{font-size:32px;}
+    .price-card.featured{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">
+      <svg viewBox="0 0 48 48" fill="none"><path d="M24 2 L44 10 V22 C44 34 36 42.5 24 46 C12 42.5 4 34 4 22 V10 Z" fill="#12B8A6"/><path d="M24 2 L44 10 V22 C44 34 36 42.5 24 46 C12 42.5 4 34 4 22 V10 Z" stroke="#071527" stroke-width="1.5"/><path d="M15 24.5 L21 30.5 L33.5 17" stroke="#071527" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <div class="logo-text">NOVASAVOIR<span>SECURITY</span></div>
+    </div>
+    <div class="nav-links">
+      <a href="#services">Outils de sécurité</a>
+      <a href="#admin">Administration</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#process">Comment ça marche</a>
+    </div>
+    <a href="#tarifs" class="nav-cta">Sécuriser mon projet</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="grid-bg"></div>
+  <div class="wrap hero-inner">
+    <div>
+      <div class="eyebrow-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#8FE9DC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Plateforme de sécurité NOVASAVOIR
+      </div>
+      <h1>La sécurité et l'authentification de vos <em>sites, apps</em> et <em>panels admin</em>, gérées pour vous.</h1>
+      <p class="hero-sub">NOVASAVOIR-SECURITY met en place, surveille et maintient l'authentification (Firebase) et la sécurité de vos plateformes web et mobiles — y compris les espaces d'administration. Comme pour ActeProImmo, chaque projet reçoit sa propre couverture, tarifée et datée.</p>
+      <div class="hero-actions">
+        <a href="#tarifs" class="btn-primary">Voir les tarifs</a>
+        <a href="#services" class="btn-ghost">Découvrir les outils</a>
+      </div>
+      <div class="hero-badge-stats">
+        <div class="stat"><b>648 FCFA</b><span>Taux appliqué / 1 USD</span></div>
+        <div class="stat"><b>12 mois</b><span>Couverture par forfait</span></div>
+        <div class="stat"><b>Firebase</b><span>Auth &amp; sécurité intégrées</span></div>
+      </div>
+    </div>
+    <div class="radar-holder">
+      <div class="radar-ring r1"></div>
+      <div class="radar-ring r2"></div>
+      <div class="radar-ring r3"></div>
+      <div class="sweep"></div>
+      <svg class="shield-core" viewBox="0 0 150 150" fill="none">
+        <path d="M75 6 L138 30 V70 C138 106 112 132 75 144 C38 132 12 106 12 70 V30 Z" fill="#0E2545" stroke="#12B8A6" stroke-width="2"/>
+        <path d="M48 76 L66 94 L104 52" stroke="#12B8A6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Outils de sécurité</div>
+      <h2>Une boîte à outils complète pour protéger vos plateformes</h2>
+      <p class="section-sub">Chaque outil peut être activé seul ou combiné dans un forfait, selon les besoins de votre site, votre app ou votre panel d'administration.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 22 6v6c0 6-4.5 10-10 12C6.5 22 2 18 2 12V6l10-4z" stroke="#12B8A6" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="#12B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Authentification Firebase</h3>
+        <p>Connexion sécurisée, gestion des comptes utilisateurs, vérification e-mail/téléphone et règles d'accès configurées et maintenues.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="10" width="16" height="10" rx="2" stroke="#12B8A6" stroke-width="2"/><path d="M8 10V7a4 4 0 018 0v3" stroke="#12B8A6" stroke-width="2"/></svg></div>
+        <h3>Sécurisation des panels admin</h3>
+        <p>Verrouillage des accès administrateurs, rôles &amp; permissions, journal des connexions et alertes en cas d'activité suspecte.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#12B8A6" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#12B8A6" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Audit &amp; surveillance</h3>
+        <p>Contrôle régulier des règles de sécurité, détection des failles courantes et rapport de suivi transmis au client.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3" stroke="#12B8A6" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Protection API &amp; back-end</h3>
+        <p>Sécurisation des points d'accès, gestion des clés et jetons, limitation des requêtes abusives.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#12B8A6" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="#12B8A6" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Sécurité sites &amp; apps mobiles</h3>
+        <p>Mise en conformité des sites web et applications mobiles : HTTPS, stockage sécurisé et bonnes pratiques appliquées.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20v-6M12 14L5 10l7-4 7 4-7 4z" stroke="#12B8A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Sauvegarde &amp; reprise</h3>
+        <p>Plan de sauvegarde des données et procédure de restauration en cas d'incident de sécurité.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="admin">
+  <div class="wrap">
+    <div class="admin-band">
+      <div>
+        <div class="eyebrow">Gestion des administrations</div>
+        <h2>On gère vos pages d'administration, du web à l'app</h2>
+        <p>NOVASAVOIR-SECURITY prend en charge la mise en place et la supervision continue des espaces d'administration de vos projets — quel que soit le domaine : immobilier, e-commerce, gestion interne, etc.</p>
+        <ul class="admin-list">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#8FE9DC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Création et sécurisation des comptes administrateurs</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#8FE9DC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Suivi des connexions et des accès sensibles</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#8FE9DC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Support pour sites web, applications mobiles et plateformes internes</li>
+        </ul>
+      </div>
+      <div class="admin-panel-mock">
+        <div class="bar"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        <div class="admin-row"><span>projet</span><b>ActeProImmo</b></div>
+        <div class="admin-row"><span>authentification</span><b>Firebase</b></div>
+        <div class="admin-row"><span>panel admin</span><span class="status-ok">sécurisé</span></div>
+        <div class="admin-row"><span>couverture</span><b>12/08/2026 → 11/08/2027</b></div>
+        <div class="admin-row"><span>statut</span><span class="status-ok">actif ✓</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tarifs">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Tarifs</div>
+      <h2>Des forfaits clairs, en dollars comme en FCFA</h2>
+      <p class="section-sub">Basés sur le forfait Sécurité &amp; Authentification déjà appliqué à ActeProImmo (20 USD / an).</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <div class="price-card">
+        <div class="price-name">Essentiel</div>
+        <div class="price-desc">Authentification Firebase pour un site ou une app.</div>
+        <div class="price-amount">$20<span>/ an</span></div>
+        <div class="price-cfa">≈ 12 960 FCFA / an</div>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Authentification Firebase</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> 1 projet (site ou app)</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Couverture de 12 mois</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Reçu &amp; suivi de validité</li>
+        </ul>
+        <a href="#" class="price-btn">Choisir Essentiel</a>
+      </div>
+
+      <div class="price-card featured">
+        <div class="featured-tag">Le plus choisi</div>
+        <div class="price-name">Pro</div>
+        <div class="price-desc">Sécurité complète incluant le panel d'administration.</div>
+        <div class="price-amount">$45<span>/ an</span></div>
+        <div class="price-cfa">≈ 29 160 FCFA / an</div>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Tout le forfait Essentiel</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Sécurisation du panel admin</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Jusqu'à 3 projets (web + app)</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Audit de sécurité trimestriel</li>
+        </ul>
+        <a href="#" class="price-btn">Choisir Pro</a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-name">Entreprise</div>
+        <div class="price-desc">Pour plusieurs plateformes et équipes d'administration.</div>
+        <div class="price-amount">Sur devis</div>
+        <div class="price-cfa">Tarif calculé selon vos projets</div>
+        <ul class="price-features">
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Tout le forfait Pro</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Projets illimités</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Support prioritaire &amp; surveillance continue</li>
+          <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg> Accompagnement dédié</li>
+        </ul>
+        <a href="#" class="price-btn">Demander un devis</a>
+      </div>
+
+    </div>
+    <div class="rate-strip">Taux appliqué : 1 USD ≈ 648 FCFA — montants FCFA arrondis, à titre indicatif.</div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Comment ça marche</div>
+      <h2>De la demande à la couverture active</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h4>Choix du forfait</h4>
+        <p>Vous sélectionnez le niveau de sécurité adapté à votre site, app ou panel admin.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h4>Mise en place</h4>
+        <p>NOVASAVOIR-SECURITY configure Firebase Authentication et les règles de sécurité liées.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h4>Reçu &amp; validité</h4>
+        <p>Un reçu est émis avec le montant en USD et en FCFA, et la date de validité de la couverture.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h4>Suivi continu</h4>
+        <p>Surveillance, alertes et renouvellement avant la fin de la période couverte.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta">
+      <h2>Prêt à sécuriser votre prochain projet ?</h2>
+      <p>Comme pour ActeProImmo, obtenez une couverture Firebase claire, datée et facturée en USD et en FCFA.</p>
+      <a href="#tarifs" class="btn-primary">Demander mon forfait</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-brand">
+      <svg viewBox="0 0 48 48" fill="none"><path d="M24 2 L44 10 V22 C44 34 36 42.5 24 46 C12 42.5 4 34 4 22 V10 Z" fill="#12B8A6"/><path d="M15 24.5 L21 30.5 L33.5 17" stroke="#071527" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      NOVASAVOIR-SECURITY
+    </div>
+    <div>© 2026 NOVASAVOIR-SECURITY — Sécurité &amp; authentification pour web, app et sites.</div>
+  </div>
+</footer>
+
+</body>
+</html>
